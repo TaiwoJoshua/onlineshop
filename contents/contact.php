@@ -3,43 +3,70 @@
 
 	$username = '';
 
+	//Checks if User is Logged In
 	if(isset($_SESSION['username'])){
 		$username = $_SESSION['username'];
 	} 
+
+	$_SESSION['cname'] = "";
+    $_SESSION['cemail'] = "";
+    $_SESSION['cphone'] = "";
+    $_SESSION['csubject'] = "";
+    $_SESSION['cmessage'] = "";
+	$_SESSION['cempty'] = "";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Taiwo Joshua from https://taiwojoshua.netlify.app/">
-
-	<!-- title -->
-	<title>Contact</title>
-
-<!-- favicon -->
-<link rel="shortcut icon" type="image/png" href="../assets/img/favicon.png">
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="shop e-commerce online buying teejay store">
+    <meta property="author" content="Taiwo Joshua">
+    <meta name="description" content="An e-commerce website where you can buy products">
+    <meta property="og:description" content="An e-commerce website where you can buy products">
+    <meta property="og:locale" content="en_UK">
+    <meta property="og:image" content="https://">
+    <meta property="og:title" content="Change me">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://">
+    <meta name="theme-color" content="#F28123 #012738">
+    
 	<!-- google font -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+	
 	<!-- fontawesome -->
 	<link rel="stylesheet" href="../assets/css/all.min.css">
+	
 	<!-- bootstrap -->
 	<link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+	
 	<!-- owl carousel -->
 	<link rel="stylesheet" href="../assets/css/owl.carousel.css">
+	
 	<!-- magnific popup -->
 	<link rel="stylesheet" href="../assets/css/magnific-popup.css">
+	
 	<!-- animate css -->
 	<link rel="stylesheet" href="../assets/css/animate.css">
+	
 	<!-- mean menu css -->
 	<link rel="stylesheet" href="../assets/css/meanmenu.min.css">
+	
 	<!-- main style -->
 	<link rel="stylesheet" href="../assets/css/main.css">
+	
 	<!-- responsive -->
 	<link rel="stylesheet" href="../assets/css/responsive.css">
 
+	<!-- Icon -->
+	<link rel="icon" href="../assets/img/favicon.png">
+    <link rel="apple-touch-icon" href="../assets/img/favicon.png">
+
+	<!-- title -->
+	<title>Contact</title>
 </head>
 <body>
 	
@@ -68,31 +95,22 @@
 						<!-- menu start -->
 						<nav class="main-menu">
 							<ul>
-								<li class="current-list-item"><a href="../index.php">Home</a></li>
-								<li><a href="about.php">About</a></li>
-								 
-								 
-								<li><a href="contact.php">Contact</a></li>
-								<li><a href="shop.php">Shop</a>
-									<ul class="sub-menu">
-										<li><a href="shop.php">Shop</a></li>
-
-										<li><a href="single-product.php">Single Product</a></li>
-										<li><a href="cart.php">Cart</a></li>
-									</ul>
-								</li>
+							<li><a href="../index.php"><i class="fas fa-home ititle"></i> Home</a></li>
+								<li><a href="about.php"><i class="fas fa-info-circle ititle"></i> About</a></li>
+								<li class="current-list-item"><a href="contact.php"><i class="fas fa-phone ititle"></i> Contact</a></li>
+								<li><a href="shop.php"><i class="fas fa-store ititle"></i> Shop</a></li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle">&nbsp;&nbsp;Cart</span></a>
 										<a class="mobile-hide search-bar-icon"><i class="fas fa-search"></i></a>
-										<a href="login.php" id="loginicon" class="fas fa-user-plus"></a>
-										<a class="fas fa-user" id="loggedinicon"></a>
+										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle">&nbsp;&nbsp;Login / Signup</span></a>
+										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle">&nbsp;&nbsp;<?php echo $username ?></span></a>
 										<div id="usercard">
 											<img src="../assets/img/user.png" alt="<?php echo $username ?>">
 											<div><?php echo $username ?></div>
-											<a href="logout.php" class="bordered-btn" style="padding: 5px 15px;">Logout</a>
+											<a href="logout.php" class="bordered-btn">Logout</a>
 										</div>
-										<a class="fas fa-cart-plus" id="addproduct" href="./addproduct.php"></a>
+										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle">&nbsp;&nbsp;Add Product</span></a>
 									</div>
 								</li>
 							</ul>
@@ -113,13 +131,13 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<span class="close-btn"><i class="fas fa-window-close"></i></span>
-					<div class="search-bar">
+					<form method="POST" action="./shop.php" class="search-bar">
 						<div class="search-bar-tablecell">
 							<h3>Search For:</h3>
-							<input type="text" placeholder="Keywords">
-							<button type="submit">Search <i class="fas fa-search"></i></button>
+							<input type="text" placeholder="keyword here" name="keyword">
+							<button type="submit" name="searchbtn">Search <i class="fas fa-search"></i></button>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -148,22 +166,23 @@
 				<div class="col-lg-8 mb-5 mb-lg-0">
 					<div class="form-title">
 						<h2>Have you any question?</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Pariatur, ratione! Laboriosam est, assumenda. Perferendis, quo alias quaerat aliquid. Corporis ipsum minus voluptate? Dolore, esse natus!</p>
+						<p>Fill the form below to make enquiries or give feedbacks.</p>
 					</div>
-				 	<div id="form_status"></div>
 					<div class="contact-form">
-						<form type="POST" id="fruitkha-contact" onSubmit="return valid_datas( this );">
+						<form method="POST" action="./Mails/contact_form.php">
 							<p>
-								<input type="text" placeholder="Name" name="name" id="name">
-								<input type="email" placeholder="Email" name="email" id="email">
+								<input type="text" placeholder="Your Name..." value="<?php if($_SESSION['cempty'] == "cempty"){}else{ echo $_SESSION['cname']; } ?>" name="cname" id="name">
+								<input type="email" placeholder="Your E-Mail..." value="<?php if($_SESSION['cempty'] == "cempty"){}else{ echo $_SESSION['cemail']; } ?>" name="cemail" id="email">
 							</p>
 							<p>
-								<input type="tel" placeholder="Phone" name="phone" id="phone">
-								<input type="text" placeholder="Subject" name="subject" id="subject">
+								<input type="tel" placeholder="Your Phone Number..." value="<?php if($_SESSION['cempty'] == "cempty"){}else{ echo $_SESSION['cphone']; } ?>" name="cphone" id="phone" maxlength="14">
+								<input type="text" placeholder="Subject here..." value="<?php if($_SESSION['cempty'] == "cempty"){}else{ echo $_SESSION['csubject']; } ?>" name="csubject" id="subject">
 							</p>
-							<p><textarea name="message" id="message" cols="30" rows="10" placeholder="Message"></textarea></p>
-							<input type="hidden" name="token" value="FsWga4&@f6aw" />
-							<p><input type="submit" value="Submit"></p>
+							<p><textarea name="cmessage" id="Message here..." value="<?php if($_SESSION['cempty'] == "cempty"){}else{ echo $_SESSION['cmessage']; } ?>" cols="30" rows="10" placeholder="Message"></textarea></p>
+
+							<input type="hidden" name="acceptc" value="accept" />
+							
+							<p><input type="submit" value="Submit" name="submit"></p>
 						</form>
 					</div>
 				</div>
@@ -175,11 +194,11 @@
 						</div>
 						<div class="contact-form-box">
 							<h4><i class="far fa-clock"></i> Shop Hours</h4>
-							<p>MON - FRIDAY: 8 to 9 PM <br> SAT - SUN: 10 to 8 PM </p>
+							<p>MON - FRIDAY: 8 to 9 PM <br> SAT: 10 to 8 PM </p>
 						</div>
 						<div class="contact-form-box">
 							<h4><i class="fas fa-address-book"></i> Contact</h4>
-							<p>Phone: +00 111 222 3333 <br> Email: support@teejay.com</p>
+							<p>Phone: +234 810 318 2378 <br> Email: support@teejay.com</p>
 						</div>
 					</div>
 				</div>
@@ -223,7 +242,7 @@
 						<ul>
 							<li>34/8, East Hukupara, Gifirtok, Sadan.</li>
 							<li>support@teejay.com</li>
-							<li>+00 111 222 3333</li>
+							<li>+234 810 318 2378</li>
 						</ul>
 					</div>
 				</div>
@@ -248,10 +267,10 @@
 	<div class="copyright">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-6 col-md-12">
-					<p>Copyrights &copy; <span id="year"></span> - <a href="https://taiwojoshua.netlify.app/">Taiwo Joshua</a>,  All Rights Reserved.</p>
+				<div class="col-lg-9 col-md-12">
+					<p>&copy; Copyright TeeJay Store <span id="year"></span>. All Rights Reserved. Designed and Developed by <a href="https://taiwojoshua.netlify.app/">Taiwo Joshua</a></p>
 				</div>
-				<div class="col-lg-6 text-right col-md-12">
+				<div class="col-lg-3 text-right col-md-12">
 					<div class="social-icons">
 						<ul>
 							<li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
@@ -267,32 +286,89 @@
 	</div>
 	<!-- end copyright -->
 	
+	<!-- Javascript Files and Libraries -->
+
 	<!-- jquery -->
 	<script src="../assets/js/jquery-1.11.3.min.js"></script>
+	
 	<!-- bootstrap -->
 	<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+	
 	<!-- count down -->
 	<script src="../assets/js/jquery.countdown.js"></script>
+	
 	<!-- isotope -->
 	<script src="../assets/js/jquery.isotope-3.0.6.min.js"></script>
+	
 	<!-- waypoints -->
 	<script src="../assets/js/waypoints.js"></script>
+	
 	<!-- owl carousel -->
 	<script src="../assets/js/owl.carousel.min.js"></script>
+	
 	<!-- magnific popup -->
 	<script src="../assets/js/jquery.magnific-popup.min.js"></script>
+	
 	<!-- mean menu -->
 	<script src="../assets/js/jquery.meanmenu.min.js"></script>
+	
 	<!-- sticker js -->
 	<script src="../assets/js/sticker.js"></script>
-	<!-- form validation js -->
-	<script src="../assets/js/form-validate.js"></script>
+	
 	<!-- main js -->
 	<script src="../assets/js/main.js"></script>
-	
+
+	<script>
+		//Sweet Alert Contact Successful Notification
+		function contactsuccess(){
+			swal({
+				icon: "success",
+				title: 'Message Sent Successfully',
+				// text: '',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOutUp'
+				},
+				buttons: {
+					cancel: {
+						text: "OK",
+						value: "ok",
+						visible: true,
+						closeModal: true
+					}
+				}
+			})
+		}
+
+		//Sweet Alert Contact Successful Notification
+		function contactfailed(){
+			swal({
+				icon: "error",
+				title: 'Contact Failed',
+				text: 'Contact Form is currently unavailable. Try other means such as sending an E-Mail. Thank you.',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOutUp'
+				},
+				buttons: {
+					cancel: {
+						text: "OK",
+						value: "ok",
+						visible: true,
+						closeModal: true
+					}
+				}
+			})
+		}
+	</script>
 </body>
 </html>
 <?php
+	//Checks if User is Logged In
 	if(isset($_SESSION['username'])){
 		echo '<script>
 				$("#loggedinicon").show();
@@ -305,6 +381,7 @@
 			</script>';
 	}; 
 
+	//Checks if Admin is Logged In
 	if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
 		echo '<script>
 				$("#addproduct").show();
@@ -313,5 +390,15 @@
 		echo '<script>
 				$("#addproduct").hide();
 			</script>';
+	}
+
+	if(isset($_SESSION['contactform']) && $_SESSION['contactform'] == "successful"){
+		echo '<script>contactsuccess()</script>';
+		unset($_SESSION['contactform']);
+	}
+
+	if(isset($_SESSION['contactform']) && $_SESSION['contactform'] == "failed"){
+		echo '<script>contactfailed()</script>';
+		unset($_SESSION['contactform']);
 	}
 ?>

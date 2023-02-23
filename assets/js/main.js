@@ -5,6 +5,15 @@
         let date = new Date();
         $("#year").text(date.getFullYear());
         
+        window.onclick = function(event) {
+            if(event.target.classList.contains("loggedinicon")){
+                console.log("clicked");
+              $("head").append("<style>#usercard{display: flex;}</style>");
+            }else{
+              $("head").append("<style>#usercard{display: none;}</style>");
+            }
+        }
+
         // testimonial sliders
         $(".testimonial-sliders").owlCarousel({
             items: 1,
@@ -101,19 +110,19 @@
             
         });
 
-        // projects filters isotop
-        $(".pagination-wrap>ul>li>a:not(.prev, .next)").on('click', function () {
+        // // projects filters isotop
+        // $(".pagination-wrap>ul>li>a:not(.prev, .next)").on('click', function () {
             
-            $(".pagination-wrap>ul>li>a").removeClass("active");
-            $(this).addClass("active");
+        //     $(".pagination-wrap>ul>li>a").removeClass("active");
+        //     $(this).addClass("active");
         
-            var selector = $(this).attr('data-filter');
+        //     var selector = $(this).attr('data-filter');
         
-            $(".product-lists").isotope({
-                filter: selector,
-            });
+        //     $(".product-lists").isotope({
+        //         filter: selector,
+        //     });
                     
-        });
+        // });
         
         // isotop inner
         $(".product-lists").isotope();

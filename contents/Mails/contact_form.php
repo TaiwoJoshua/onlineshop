@@ -15,7 +15,7 @@ require 'vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 
-if(isset($_POST['submit']) && isset($_POST['acceptc']) && $_POST['accept'] == "acceptc"){
+if(isset($_POST['submit']) && isset($_POST['acceptc']) && $_POST['acceptc'] == "acceptc"){
     $name = $_SESSION['cname'] = $_POST['cname'];
     $receiver = $_SESSION['cemail'] = $_POST['cemail'];
     $phone = $_SESSION['cphone'] = $_POST['cphone'];

@@ -11,6 +11,7 @@
     $email = $_POST['email'];
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
+    $_SESSION['saccept'] = $_POST['saccept'];
     if($password != $confirmPassword){
       $mismatch = "Password Mismatched";
     }else{
@@ -51,23 +52,28 @@
         $_SESSION['username'] = $lusername;
         unset($_SESSION['admin']);
 
+        $conn->query("UPDATE `customers` SET `time`='$DateTime' WHERE `username`='$lusername'");
+
         //If Redirection was from Checkout Page
-        if($_SESSION['checkout'] == 1){
+        if(isset($_SESSION['checkout']) && $_SESSION['checkout'] == 1){
           $_SESSION['checkout'] = 0;
           header("location: ./checkout.php");
 
         //If Redirection was from Cart Page
-        }else if($_SESSION['cart'] == 1){
+        }else if(isset($_SESSION['cart']) && $_SESSION['cart'] == 1){
           $_SESSION['cart'] = 0;
           header("location: ./cart.php");
 
         //If Redirection was from Shop Page
-        }else if($_SESSION['shop'] == 1){
+        }else if(isset($_SESSION['shop']) && $_SESSION['shop'] == 1){
           $_SESSION['shop'] = 0;
           header("location: ./shop.php");
-        }else if($_SESSION['contact'] == "contact"){
+        }else if(isset($_SESSION['contact']) && $_SESSION['contact'] == "contact"){
           $_SESSION['contact'] == "false";
           header("location: ./contact.php");
+        }else if(isset($_SESSION['ticketpage']) && $_SESSION['ticketpage'] == "ticket"){
+          $_SESSION['ticketpage'] = "false";
+          header("location: ./ticket.php");
         }else{
           header("location: ./preloader.php");
         }
@@ -91,6 +97,7 @@
         $_SESSION['admin'] = "admin";
         unset($_SESSION['username']);
         $empty = 'empty';
+        $conn->query("UPDATE `admin` SET `time`='$DateTime' WHERE `time` !='$DateTime'");
         if($_SESSION['addproduct'] == 1){
           $_SESSION['addproduct'] = 0;
           header("location: ./addproduct.php");
@@ -106,11 +113,13 @@
   //Onsubmission of Forgotten Password Form
   if(isset($_POST['fsubmit'])){
     $fname = $_SESSION['fname'] = $_POST['fname'];
+    $_SESSION['taccept'] = $_POST['taccept'];
     $fcheck = $conn->query("SELECT * FROM `customers` WHERE `username`='$fname'");
     if($fcheck->num_rows > 0){
       while($row = $fcheck->fetch_assoc()){
         $femail = $_SESSION['femail'] = $row['email'];
-        $token = $_SESSION['token'] = md5(time()+123456789% rand(4000, 55000000));
+        $token = substr(md5(time()+123456789% rand(4000, 55000000)), 0, 10);
+        $_SESSION['token'] = $token;
       }
       
       $check = $conn->query("SELECT * FROM `forgotten_password` WHERE `username`='$fname'");
@@ -266,7 +275,7 @@
                   <span class="tooltip" data-tooltip="At least 6 characters, 1 upper case, 1 lowercase, 1 number and a special character">?</span>
                 </div>
                 <p class="red"><?php if($empty == 'empty'){}else{echo $mismatch;} ?></p>
-                <input type="hidden" name="saccept" value="accept" />
+                <input type="hidden" name="saccept" value="accept"/>
                 <div class="button input-box">
                   <input type="submit" value=" Submit" name="submit">
                 </div>
@@ -340,5 +349,9 @@
 
   if($invalidusername != ''){
     echo '<script>$("#forgotflip").prop("checked", true);</script>';
+  }
+
+  if($incorrectpassword != ''){
+    echo '<script>$("#adminflip").prop("checked", true);</script>';
   }
 ?>

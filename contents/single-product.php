@@ -1,12 +1,16 @@
 <?php
 	include './dbconnect.php';
 
-	$username = '';
+	$username = $admin = '';
 
 	//Checks if User is Logged In
 	if(isset($_SESSION['username'])){
 		$username = $_SESSION['username'];
 	} 
+
+	if(isset($_SESSION['admin'])){
+		$admin = "Admin";
+	}
 
 	$name = $price = $img = $class = $rate = $description = array();
 
@@ -25,7 +29,7 @@
 		}
 	};
 
-	//Checks Method of Pae Entry
+	//Checks Method of Page Entry
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 		$productid = $_POST['productid'];
 	}else{
@@ -138,18 +142,20 @@
 								<li><a href="about.php"><i class="fas fa-info-circle ititle"></i> About</a></li>
 								<li><a href="contact.php"><i class="fas fa-phone ititle"></i> Contact</a></li>
 								<li class="current-list-item"><a href="shop.php"><i class="fas fa-store ititle"></i> Shop</a></li>
-								<li>
+                                <li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle">&nbsp;&nbsp;Cart</span></a>
+										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle ititle2">&nbsp;&nbsp;Cart</span></a>
+                                        <a href="ticket.php" id="ticketicon"><i class="fas fa-ticket-alt" title="Tickets"></i><span class="ititle ititle2">&nbsp;&nbsp;Tickets</span></a>
 										<a class="mobile-hide search-bar-icon"><i class="fas fa-search"></i></a>
-										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle">&nbsp;&nbsp;Login / Signup</span></a>
-										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle">&nbsp;&nbsp;<?php echo $username ?></span></a>
+										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle ititle2">&nbsp;&nbsp;Login / Signup</span></a>
+										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle ititle2">&nbsp;&nbsp;<?php echo $username.$admin ?></span></a>
 										<div id="usercard">
-											<img src="../assets/img/user.png" alt="<?php echo $username ?>">
-											<div><?php echo $username ?></div>
+											<img src="../assets/img/user.png" alt="<?php echo $username.$admin ?>">
+											<div><?php echo $username.$admin ?></div>
 											<a href="logout.php" class="bordered-btn">Logout</a>
 										</div>
-										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle">&nbsp;&nbsp;Add Product</span></a>
+										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle ititle2">&nbsp;&nbsp;Add Product</span></a>
+										<a href="logout.php" class="fas fa-sign-out-alt" id="logouticon" title="Logout"><span class="ititle ititle2">&nbsp;&nbsp;Logout</span></a>
 									</div>
 								</li>
 							</ul>
@@ -204,7 +210,7 @@
 			<div class="row">
 				<div class="col-md-5">
 					<div class="single-product-img">
-						<img src="../assets/img/products/product-img-5.jpg" alt="" id="img">
+						<img src="../assets/img/products/product-img-5.jpg" id="img">
 					</div>
 				</div>
 				<div class="col-md-7">
@@ -295,7 +301,7 @@
 	<script src="../assets/js/jquery.countdown.js"></script>
 	
 	<!-- isotope -->
-	<script src="../assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="../assets/js/isotope-docs.min.js"></script>
 	
 	<!-- waypoints -->
 	<script src="../assets/js/waypoints.js"></script>
@@ -330,6 +336,7 @@
 		$("#class").text(classes[product]);
 		$("#price").text('₦'+price[product]);
 		$("#img").attr("src", img[product]);
+		document.querySelector("#img").setAttribute("alt", name[product]);
 		$("#rate").text(rate[product]);
 		$("#description").text(description[product]);
 		
@@ -347,17 +354,25 @@
 		echo '<script>
 				$("#loggedinicon").show();
 				$("#loginicon").hide();
+				$("#logouticon").show();
+                $("#ticketicon").show();
 			</script>';
 	}else{
 		echo '<script>
 				$("#loggedinicon").hide();
 				$("#loginicon").show();
+				$("#logouticon").hide();
+                $("#ticketicon").hide();
 			</script>';
 	}; 
 
 	//Checks if Admin is Logged In
 	if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
 		echo '<script>
+				$("#loggedinicon").show();
+				$("#loginicon").hide();
+				$("#logouticon").show();
+				$("#ticketicon").show();
 				$("#addproduct").show();
 			</script>';
 	}else{

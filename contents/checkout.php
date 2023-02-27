@@ -1,7 +1,7 @@
 <?php
 	include 'dbconnect.php';
 
-	$username = '';
+	$username = $admin = '';
 	$name = $price = array();
 
 	//Checks if User is Logged In
@@ -18,10 +18,14 @@
 					$total[$i] = $row['total'];
 					$i++;
 				}
+			}else{
+				header("location: ./shop.php");
 			}
+		}else{
+			header("location: ./shop.php");
 		}
-	}else if($_SESSION['admin'] == "admin"){
-
+	}else if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
+		$admin = "Admin";
 	}else{
 		$_SESSION['checkout'] = 1;
 		header("location: ./login.php");
@@ -120,16 +124,18 @@
 								<li><a href="shop.php"><i class="fas fa-store ititle"></i> Shop</a></li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart current-list-item" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle">&nbsp;&nbsp;Cart</span></a>
+										<a class="shopping-cart current-list-item" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle ititle2">&nbsp;&nbsp;Cart</span></a>
+										<a href="ticket.php" id="ticketicon"><i class="fas fa-ticket-alt" title="Tickets"></i><span class="ititle ititle2">&nbsp;&nbsp;Tickets</span></a>
 										<a class="mobile-hide search-bar-icon"><i class="fas fa-search"></i></a>
-										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle">&nbsp;&nbsp;Login / Signup</span></a>
-										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle">&nbsp;&nbsp;<?php echo $username ?></span></a>
+										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle ititle2">&nbsp;&nbsp;Login / Signup</span></a>
+										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle ititle2">&nbsp;&nbsp;<?php echo $username.$admin ?></span></a>
 										<div id="usercard">
-											<img src="../assets/img/user.png" alt="<?php echo $username ?>">
-											<div><?php echo $username ?></div>
+											<img src="../assets/img/user.png" alt="<?php echo $username.$admin ?>">
+											<div><?php echo $username.$admin ?></div>
 											<a href="logout.php" class="bordered-btn">Logout</a>
 										</div>
-										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle">&nbsp;&nbsp;Add Product</span></a>
+										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle ititle2">&nbsp;&nbsp;Add Product</span></a>
+										<a href="logout.php" class="fas fa-sign-out-alt" id="logouticon" title="Logout"><span class="ititle ititle2">&nbsp;&nbsp;Logout</span></a>
 									</div>
 								</li>
 							</ul>
@@ -323,7 +329,7 @@
 	<script src="../assets/js/jquery.countdown.js"></script>
 	
 	<!-- isotope -->
-	<script src="../assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="../assets/js/isotope-docs.min.js"></script>
 	
 	<!-- waypoints -->
 	<script src="../assets/js/waypoints.js"></script>
@@ -361,29 +367,6 @@
 		var shipping = parseInt(($("#shipping").text()).slice(1));
 		var finaltotal = subtotal + shipping;
 		$("#finaltotal").text('₦' + finaltotal);
-
-		//Sweet Alert Check Out Successful Notification
-		function checkedout(){
-			swal({
-				icon: "success",
-				title: 'Checked Out Successfully',
-				// text: '',
-				showClass: {
-					popup: 'animate__animated animate__fadeInDown'
-				},
-				hideClass: {
-					popup: 'animate__animated animate__fadeOutUp'
-				},
-				buttons: {
-					cancel: {
-						text: "OK",
-						value: "ok",
-						visible: true,
-						closeModal: true
-					}
-				}
-			})
-		}
 	</script>
 </body>
 </html>
@@ -393,27 +376,30 @@
 		echo '<script>
 				$("#loggedinicon").show();
 				$("#loginicon").hide();
+				$("#logouticon").show();
+                $("#ticketicon").show();
 			</script>';
 	}else{
 		echo '<script>
 				$("#loggedinicon").hide();
 				$("#loginicon").show();
+				$("#logouticon").hide();
+                $("#ticketicon").hide();
 			</script>';
 	}; 
 
 	//Checks if Admin is Logged In
 	if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
 		echo '<script>
+				$("#loggedinicon").show();
+				$("#loginicon").hide();
+				$("#ticketicon").show();
+				$("#logouticon").show();
 				$("#addproduct").show();
 			</script>';
 	}else{
 		echo '<script>
 				$("#addproduct").hide();
 			</script>';
-	}
-
-	if(isset($_SESSION['checkout']) && $_SESSION['checkout'] == "successful"){
-		echo '<script>checkedout();</script>';
-		$conn->query("DROP TABLE `$username`");
 	}
 ?>

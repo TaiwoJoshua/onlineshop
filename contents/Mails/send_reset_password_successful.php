@@ -13,7 +13,7 @@ require 'vendor/autoload.php';
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
 
-if(isset($_POST['submit']) && isset($_POST['raccept']) && $_POST['raccept'] == "accept"){
+if(isset($_SESSION['raccept']) && $_SESSION['raccept'] == "accept"){
     $receiver = $_SESSION['resetemail'];
     $name = $_SESSION['resetusername'];
     $_SESSION['resetsuccessful'] = "Password Changed Successfully. Proceed to login";
@@ -122,8 +122,8 @@ if(isset($_POST['submit']) && isset($_POST['raccept']) && $_POST['raccept'] == "
         // echo 'Message has been sent';
         header('location: ../resetpassword.php');
     } catch (Exception $e) {
-        // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        header('location: ../resetpassword.php');
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        // header('location: ../resetpassword.php');
     }
 }else{
     header("location: ../../index.php");

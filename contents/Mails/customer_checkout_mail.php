@@ -15,48 +15,10 @@ require 'vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 
-if(isset($_POST['checkout']) && isset($_POST['accept']) && $_POST['accept'] == "accept"){
-    $address = $message = "";
-    $username = $_SESSION['username'];
-    $cname = $_SESSION['cname'] = $_POST['cname'];
-    $receiver = $_SESSION['cemail'] = $_POST['cemail'];
-    $phone = $_POST['cphone'];
-    $address = $_POST['caddress'];
-    $message = $_POST['cmessage'];
-    $name = $price = $quantity = $total = array();
-    $DateTime = date('Y-m-d H:i:s');
-    $ticket = "";
-
-    //Gets the User's Products from Cart
-    $get = $conn->query("SELECT * FROM `$username`");
-    if($get->num_rows > 0){
-        $i = 0;
-        while($row = $get->fetch_assoc()){
-            $name[$i] = $row['name'];
-            $price[$i] = $row['price'];
-            $quantity[$i] = $row['quantity'];
-            $total[$i] = $row['total'];
-            $i++;
-        }
-
-        $ticket = $_SESSION['ticket'] = date('Ym').rand(1000, 9999);
-        $checkticket = $conn->query("SELECT * FROM `tickets` WHERE `ticket` = $ticket");
-        while($checkticket->num_rows > 0){
-            $ticket = $_SESSION['ticket'] = date('Ym').rand(1000, 9999);
-            $newcheckticket = $conn->query("SELECT * FROM `tickets` WHERE `ticket` = $ticket");
-            if($newcheckticket->num_rows > 0){
-
-            }else{
-                break;
-            }
-        }
-        echo $ticket;
-        
-        $aname = implode(",", $name);
-        $aprice = implode(",", $price);
-        $aquantity = implode(",", $quantity);
-        $conn->query("INSERT INTO `tickets`(`username`, `email`, `ticket`, `products`, `quantity`, `price`, `time`) VALUES('$username', '$receiver', $ticket, '$aname', '$aquantity', '$aprice', '$DateTime')");
-    }
+if(isset($_SESSION['customermail']) && $_SESSION['customermail'] == "proceed"){
+    $cname = $_SESSION['cname'];
+    $receiver = $_SESSION['cemail'];
+    $ticket = $_SESSION['ticket'];
 
     try {
         //Server settings
@@ -70,10 +32,10 @@ if(isset($_POST['checkout']) && isset($_POST['accept']) && $_POST['accept'] == "
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
         //Recipients
-        $mail->setFrom($receiver, $cname);
-        $mail->addAddress('olamilekanjoshua07@gmail.com', 'TeeJayStore');     //Add a recipient
+        $mail->setFrom("joshuataiwo07@gmail.com", "TeeJayStore");
+        $mail->addAddress($receiver, $cname);     //Add a recipient
         // $mail->addAddress('ellen@example.com');               //Name is optional
-        $mail->addReplyTo($receiver, $cname);
+        $mail->addReplyTo("joshuataiwo07@gmail.com", "TeeJayStore");
         // $mail->addCC('cc@example.com');
         // $mail->addBCC('bcc@example.com');
 
@@ -114,31 +76,36 @@ if(isset($_POST['checkout']) && isset($_POST['accept']) && $_POST['accept'] == "
                 span{
                     color: #051922 !important;
                 }
+                a{
+                    text-decoration: none;
+                    color: #051922;
+                }
+                a:hover{
+                    text-decoration: underline;
+                }
             </style>
         </head>
         <body>
             <div class='pagewrapper'>
                 <div class='formwrapper'>
                     <h2>TeeJay<span>Store</span></h2>
-                    <h4>$cname Checkout</h4>
-                    <p>Name: <span>$cname</span></p>
-                    <p>E-Mail: <span>$receiver</span></p>
-                    <p>Phone Number: <span>$phone</span></p>
-                    <p>Address: <span>$address</span></p>
-                    <p>Message: <span>$message</span></p>
-                    <p>Ticket: <span>$ticket</span></p>
+                    <h4>Hello $cname,</h4>
+                    <p>You have successfully placed an order with TeeJay<span>Store</span>.</p>
+                    <p>Your ticket number for this order is $ticket.</p>
+                    <p>You can check back <a href='ticket.php'>here</a> to monitor the status of your order.</p>
+                    <p>Thank you.</p>
                 </div>
             </div>
         </body>
         </html>";
-        $mail->AltBody = "$cname Checkout Form. Name: $cname. E-Mail: $receiver. Phone Number: $phone. Message: $message. Ticket: $ticket";
+        $mail->AltBody = "$cname Checkout Form. Order placed successfully. Ticket number of order: $ticket";
         
         $mail->send();
         // echo 'Message has been sent';
-        $_SESSION['customermail'] = "proceed";
-        header('location: ./customer_checkout_mail.php');
+        $_SESSION['checkoutstatus'] = "successful";
+        header('location: ../../index.php');
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-        header('location: ./customer_checkout_mail.php');
+        // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        header('location: ../../index.php');
     }
 }

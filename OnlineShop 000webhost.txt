@@ -1,0 +1,18 @@
+DB_Name: id20352104_teejaystoredatabase
+DB_Username: id20352104_teejaystore
+DB_Password: 3/w9&Dn@Fr/}$Yq7
+
+
+// db_connect.php
+<?php
+    session_start();
+    ob_start();
+    $server="localhost";
+    $serverUsername="id19764144_teejay";
+    $serverPassword="=Nzm^0Dx2<a53VIR";
+    $dbName="id19764144_300lvl_timetable";
+    date_default_timezone_set('Africa/Lagos');
+
+    $conn=new mysqli($server,$serverUsername,$serverPassword,$dbName);
+
+?>

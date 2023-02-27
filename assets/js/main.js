@@ -7,7 +7,6 @@
         
         window.onclick = function(event) {
             if(event.target.classList.contains("loggedinicon")){
-                console.log("clicked");
               $("head").append("<style>#usercard{display: flex;}</style>");
             }else{
               $("head").append("<style>#usercard{display: none;}</style>");
@@ -118,9 +117,9 @@
         
         //     var selector = $(this).attr('data-filter');
         
-        //     $(".product-lists").isotope({
-        //         filter: selector,
-        //     });
+            // $(".product-lists").isotope({
+            //     filter: selector,
+            // });
                     
         // });
         

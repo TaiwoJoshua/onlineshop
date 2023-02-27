@@ -13,7 +13,7 @@ require 'vendor/autoload.php';
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
 
-if(isset($_POST['fsubmit']) && isset($_POST['taccept']) && $_POST['taccept'] == "accept"){
+if(isset($_SESSION['taccept']) && $_SESSION['taccept'] == "accept"){
     $receiver = $_SESSION['femail'];
     $name = $_SESSION['fname'];
     $token = $_SESSION['token'];

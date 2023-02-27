@@ -1,7 +1,7 @@
 <?php
 	include 'dbconnect.php';
 
-	$username = $name = $price = $img = $quantity = $total = $emptycart = '';
+	$username = $admin = $name = $price = $img = $quantity = $total = $emptycart = '';
 
 	//Checks if User is Logged In
 	if(isset($_SESSION['username'])){
@@ -40,8 +40,8 @@
 				}
 			}
 		}
-	}else if($_SESSION['admin'] == "admin"){
-
+	}else if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
+		$admin = "Admin"; 
 	}else{
 		$_SESSION['cart'] = 1;
 		header("location: ./login.php");
@@ -126,16 +126,18 @@
 								<li><a href="shop.php"><i class="fas fa-store ititle"></i> Shop</a></li>
 								<li>
 									<div class="header-icons">
-										<a class="shopping-cart current-list-item" href="cart.php" style="color: #F28123;"><i class="fas fa-shopping-cart"></i></a>
-										<a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
-										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"></a>
-										<a class="fas fa-user loggedinicon" id="loggedinicon"></a>
+										<a class="shopping-cart" href="cart.php" style="color: #F28123;"><i class="fas fa-shopping-cart"></i><span class="ititle ititle2">&nbsp;&nbsp;Cart</span></a>
+                                        <a href="ticket.php" id="ticketicon"><i class="fas fa-ticket-alt" title="Tickets"></i><span class="ititle ititle2">&nbsp;&nbsp;Tickets</span></a>
+										<a class="mobile-hide search-bar-icon"><i class="fas fa-search"></i></a>
+										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle ititle2">&nbsp;&nbsp;Login / Signup</span></a>
+										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle ititle2">&nbsp;&nbsp;<?php echo $username.$admin ?></span></a>
 										<div id="usercard">
-											<img src="../assets/img/user.png" alt="<?php echo $username ?>">
-											<div><?php echo $username ?></div>
+											<img src="../assets/img/user.png" alt="<?php echo $username.$admin ?>">
+											<div><?php echo $username.$admin ?></div>
 											<a href="logout.php" class="bordered-btn">Logout</a>
 										</div>
-										<a class="fas fa-cart-plus" id="addproduct" href="./addproduct.php"></a>
+										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle ititle2">&nbsp;&nbsp;Add Product</span></a>
+										<a href="logout.php" class="fas fa-sign-out-alt" id="logouticon" title="Logout"><span class="ititle ititle2">&nbsp;&nbsp;Logout</span></a>
 									</div>
 								</li>
 							</ul>
@@ -314,7 +316,7 @@
 	<script src="../assets/js/jquery.countdown.js"></script>
 	
 	<!-- isotope -->
-	<script src="../assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="../assets/js/isotope-docs.min.js"></script>
 	
 	<!-- waypoints -->
 	<script src="../assets/js/waypoints.js"></script>
@@ -371,7 +373,6 @@
 		//Onclick of Update Cart Button
 		$("#updatebtn").click(function(){
 			nlength = document.querySelectorAll(".cart-table>tbody>.table-body-row").length;
-			console.log(nlength);
 			$("#nitems").val(nlength);
 		})
 
@@ -414,17 +415,25 @@
 		echo '<script>
 				$("#loggedinicon").show();
 				$("#loginicon").hide();
+				$("#logouticon").show();
+                $("#ticketicon").show();
 			</script>';
 	}else{
 		echo '<script>
 				$("#loggedinicon").hide();
 				$("#loginicon").show();
+				$("#logouticon").hide();
+                $("#ticketicon").hide();
 			</script>';
 	}; 
 
 	//Checks if Admin is Logged In
 	if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
 		echo '<script>
+				$("#loggedinicon").show();
+				$("#loginicon").hide();
+				$("#ticketicon").show();
+				$("#logouticon").show();
 				$("#addproduct").show();
 			</script>';
 	}else{
@@ -434,9 +443,11 @@
 	}
 
 	//Checks if Cart Empty
-	if($_SESSION['emptycart'] == 1){
-		echo '<script> emptycart(); </script>';
-		$_SESSION['emptycart'] = 0;
+	if(isset($_SESSION['emptycart'])){
+		if($_SESSION['emptycart'] == 1){
+			echo '<script> emptycart(); </script>';
+			$_SESSION['emptycart'] = 0;
+		}
 	}
 
 	// Monitors Number of Products in Cart

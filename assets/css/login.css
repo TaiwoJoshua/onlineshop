@@ -8,6 +8,8 @@
 }
 body{
   min-height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,6 +18,21 @@ body{
   padding-bottom: 30px;
   color: #07212e;
   position: relative;
+}
+body::-webkit-scrollbar{
+  width: 0.5em;
+}
+body::-webkit-scrollbar-track{
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background: #FAF3E0;
+}
+body::-webkit-scrollbar-thumb{
+  background-color: #012738;
+  border: 0.5px solid #F28123;
+}
+:root{
+  scrollbar-color: #012738 #FAF3E0;
+  scrollbar-width: thin;
 }
 .site-logo{
   width: 100vw;
@@ -46,6 +63,7 @@ body::-webkit-scrollbar-thumb{
 .container{
   position: relative;
   max-width: 850px;
+  max-width: 90vw;
   width: 100%;
   height: 100%;
   background: #fff;
@@ -64,7 +82,7 @@ body::-webkit-scrollbar-thumb{
   transform-origin: left;
   transform-style: preserve-3d;
 }
-.container #flip:checked ~ .cover, .container #forgotflip:checked ~ .cover{
+input[type="checkbox"]:checked ~ .cover{
   transform: rotateY(-180deg);
 }
 .container #adminflip:checked ~ .cover{
@@ -141,6 +159,9 @@ body::-webkit-scrollbar-thumb{
   height: 100%;
   width: 100%;
   background: #fff;
+  transition: all 1s ease;
+  transform-origin: center;
+  transform-style: preserve-3d;
 }
 .container .form-content{
   display: flex;
@@ -417,6 +438,12 @@ Media Query
 
 ----------------------------------------------------------------------------- */
 @media (max-width: 730px) {
+  body{
+    height: auto;
+  }
+  .container{
+    width: calc(100% - 25px);
+  }
   .container .cover{
     display: none;
   }
@@ -426,7 +453,7 @@ Media Query
   .form-content .signup-form{
     display: none;
   }
-  .container #flip:checked ~ .cover, .container #forgotflip:checked ~ .cover, .container #adminflip:checked ~ .cover{
+  input[type="checkbox"]:checked ~ div.forms{
     transform: rotateX(360deg);
   }
   .container #flip:checked ~ .forms>div>.loginform{

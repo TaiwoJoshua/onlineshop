@@ -1,7 +1,7 @@
 <?php
     include './dbconnect.php';
 
-    $empty = $emailpwordmismatch = $lemail = $invalidtoken = $token = $mismatch = $oldpassword = $loginerror = $resetsuccessful = $_SESSION['resetsuccessful'] = '';
+    $empty = $emailpwordmismatch = $lemail = $invalidtoken = $token = $mismatch = $oldpassword = $loginerror = $resetsuccessful = '';
 
     $DateTime = date('Y-m-d H:i:s');
 
@@ -45,9 +45,9 @@
             }else{
                 $get = $conn->query("SELECT * FROM `customers` WHERE `username`='$username'");
                 if($get->num_rows > 0){
-                    while($row = $check->fetch_assoc()){
-                        $oldpassword = $row['password'];
-                        $resetemail = $_SESSION['resetemail'] = $row['email'];
+                    while($rows = $get->fetch_assoc()){
+                        $oldpassword = $rows['password'];
+                        $resetemail = $_SESSION['resetemail'] = $rows['email'];
                     }
                     if(password_verify($password, $oldpassword)){
                         $mismatch = "New Password cannot be the same as Old Password";
@@ -55,6 +55,7 @@
                         $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 12]);
                         $conn->query("UPDATE `customers` SET `password`='$password' WHERE `username`='$username'");
                         $conn->query("DELETE FROM `forgotten_password` WHERE `token`='$token'");
+                        $_SESSION['raccept'] = $_POST['raccept'];
                         header("location: ./Mails/send_reset_password_successful.php");
                         $empty = 'empty';
                     }
@@ -144,7 +145,7 @@
                     <div class="input-boxes">
                         <div class="input-box">
                             <i class="fas fa-key"></i>
-                            <input type="text" name="token" placeholder="Enter your token" value="<?php if($empty == 'empty'){}else{echo $token;} ?>" required>
+                            <input type="text" name="token" maxlength="10" placeholder="Enter your token" value="<?php if($empty == 'empty'){}else{echo $token;} ?>" required>
                         </div>
                         <p class="red"><?php if($empty == 'empty'){}else{echo $invalidtoken;} ?></p>
                         <div class="input-box">
@@ -167,7 +168,7 @@
             </div>
 
             <div class="login-form">
-                <p><?php echo $_SESSION['resetsuccessful']; ?></p>
+                <p><?php if(isset($_SESSION['resetsuccessful'])){echo $_SESSION['resetsuccessful'];} ?></p>
                 <div class="title">Login</div>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
                 <div class="input-boxes">
@@ -227,9 +228,9 @@
     if($loginerror == 'error'){
         echo '<script>$("#flip").prop("checked", true);</script>';
     }
-    if(isset($_SESSION['sentstatus'])){
-        if($_SESSION['sentstatus'] == "sent"){
-          echo '<script>$("$("#flip").prop("checked", true);</script>';
+    if(isset($_SESSION['resetstatus'])){
+        if($_SESSION['resetstatus'] == "success"){
+          echo '<script>$("#flip").prop("checked", true);</script>';
         }
       }
 ?>

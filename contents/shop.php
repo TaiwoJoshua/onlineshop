@@ -1,12 +1,16 @@
 <?php
 	include 'dbconnect.php';
 	
-	$username = $dname = $pname = $keyword = $added = $alreadyadded = $delete = '';
+	$username = $admin = $dname = $pname = $keyword = $added = $alreadyadded = $delete = '';
 	$pagenum = 2;
 	
 	//Check if user is logged in
 	if(isset($_SESSION['username'])){
 		$username = $_SESSION['username'];
+	}
+
+	if(isset($_SESSION['admin'])){
+		$admin = "Admin";
 	}
 
 	//Select all products from Database
@@ -33,6 +37,7 @@
 	//Onsubmission of Search Form
 	if(isset($_POST['searchbtn']) && $_SERVER["REQUEST_METHOD"] == "POST"){
 		$keyword = $_POST['keyword'];
+		$keyword = ".".strtolower($keyword);
 	}
 
 	// Onclick of Add to Cart 
@@ -130,6 +135,13 @@
 
 	<!-- title -->
 	<title>Shop</title>
+
+	<style>
+		.product-image img {
+			object-fit: contain;
+			height: 200px;
+		}
+	</style>
 </head>
 <body>
 	
@@ -162,18 +174,20 @@
 								<li><a href="about.php"><i class="fas fa-info-circle ititle"></i> About</a></li>
 								<li><a href="contact.php"><i class="fas fa-phone ititle"></i> Contact</a></li>
 								<li class="current-list-item"><a href="shop.php"><i class="fas fa-store ititle"></i> Shop</a></li>
-								<li>
+                                <li>
 									<div class="header-icons">
-										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle">&nbsp;&nbsp;Cart</span></a>
+										<a class="shopping-cart" href="cart.php"><i class="fas fa-shopping-cart"></i><span class="ititle ititle2">&nbsp;&nbsp;Cart</span></a>
+                                        <a href="ticket.php" id="ticketicon"><i class="fas fa-ticket-alt" title="Tickets"></i><span class="ititle ititle2">&nbsp;&nbsp;Tickets</span></a>
 										<a class="mobile-hide search-bar-icon"><i class="fas fa-search"></i></a>
-										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle">&nbsp;&nbsp;Login / Signup</span></a>
-										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle">&nbsp;&nbsp;<?php echo $username ?></span></a>
+										<a href="login.php" id="loginicon" title="Login/Signup" class="fas fa-user-plus"><span class="ititle ititle2">&nbsp;&nbsp;Login / Signup</span></a>
+										<a class="fas fa-user loggedinicon" id="loggedinicon"><span class="ititle ititle2">&nbsp;&nbsp;<?php echo $username.$admin ?></span></a>
 										<div id="usercard">
-											<img src="../assets/img/user.png" alt="<?php echo $username ?>">
-											<div><?php echo $username ?></div>
+											<img src="../assets/img/user.png" alt="<?php echo $username.$admin ?>">
+											<div><?php echo $username.$admin ?></div>
 											<a href="logout.php" class="bordered-btn">Logout</a>
 										</div>
-										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle">&nbsp;&nbsp;Add Product</span></a>
+										<a class="fas fa-cart-plus" id="addproduct" href="addproduct.php"><span class="ititle ititle2">&nbsp;&nbsp;Add Product</span></a>
+										<a href="logout.php" class="fas fa-sign-out-alt" id="logouticon" title="Logout"><span class="ititle ititle2">&nbsp;&nbsp;Logout</span></a>
 									</div>
 								</li>
 							</ul>
@@ -326,7 +340,7 @@
 	<script src="../assets/js/jquery.countdown.js"></script>
 	
 	<!-- isotope -->
-	<script src="../assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="../assets/js/isotope-docs.min.js"></script>
 	
 	<!-- waypoints -->
 	<script src="../assets/js/waypoints.js"></script>
@@ -388,9 +402,11 @@
 
 		// Create Page Filter Buttons
 		$(".pagination-wrap>ul").append('<li><a class="prev" data-filter=".' + convertNumberToWords(i + 1) + '">Prev</a></li>')
+
 		for(i = 0; i < page; i++){
 			$(".pagination-wrap>ul").append('<li><a data-filter=".' + convertNumberToWords(i + 1) + '">' + (i + 1) + '</a></li>')
 		}
+
 		$(".pagination-wrap>ul").append('<li><a class="next" data-filter=".' + convertNumberToWords(i + 1) + '">Next</a></li>')
 
 		// Functionality of Prev and Next
@@ -650,11 +666,34 @@
 			})
 		}
 
+		//Sweet Alert No Ticket Notification
+		function noticket(){
+			swal({
+				icon: "error",
+				title: 'No Record Found',
+				// text: ' not found',
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOutUp'
+				},
+				buttons: {
+					cancel: {
+						text: "OK",
+						value: "ok",
+						visible: true,
+						closeModal: true
+					}
+				}
+			})
+		}
+
 		//Search Function
 		function search(){
-			let selector = '<?php $keyword = ".".$keyword; echo $keyword; ?>';
+			let selector = '<?php echo $keyword; ?>';
 			$(".product-lists").isotope({
-                filter: selector.toLowerCase(),
+                filter: selector,
             });
 			count = $(selector + ':not(.isotope-hidden)').length;
 			if(count == 0){
@@ -689,19 +728,27 @@
 		echo '<script>
 				$("#loggedinicon").show();
 				$("#loginicon").hide();
+				$("#logouticon").show();
+                $("#ticketicon").show();
 			</script>';
 	}else{
 		echo '<script>
 				$("#loggedinicon").hide();
 				$("#loginicon").show();
+				$("#logouticon").hide();
+                $("#ticketicon").hide();
 			</script>';
 	}; 
 
 	//Check if Admin is Logged In
 	if(isset($_SESSION['admin']) && $_SESSION['admin'] == "admin"){
 		echo '<script>
+				$("#loggedinicon").show();
+				$("#loginicon").hide();
+				$("#logouticon").show();
 				$("#addproduct").show();
 				$(".delete").show();
+				$("#ticketicon").show();
 			</script>';
 	}else{
 		echo '<script>
@@ -709,4 +756,13 @@
 				$(".delete").hide();
 			</script>';
 	};
+
+	if(isset($_SESSION['gettickets'])){
+		if($_SESSION['gettickets'] == "failed"){
+			echo '<script>
+					noticket();
+				</script>';
+			$_SESSION['gettickets'] = 'delivered';
+		}
+	}
 ?>

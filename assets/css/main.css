@@ -2534,17 +2534,23 @@ table.order-details tbody td {
   margin-bottom: 5px;
 }
 #usercard>a{
+  width: 70px;
   padding: 3px 10px;
   font-size: 12px;
   font-weight: 600;
+  text-align: center;
+  border: 2px solid #F28123;
 }
 #usercard>a:hover{
   color: #012738;
 }
 .ititle{
-  font-family:  "Open Sans", sans-serif;
   text-transform: uppercase;
   display: none;
+}
+.ititle2{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
 }
 #loggedinicon>span{
   text-transform: none;
@@ -2568,9 +2574,55 @@ table.order-details tbody td {
   color: white;
 }
 
-@media only screen and (max-width: 767.96px) {
+@media only screen and (max-width: 992px) {
   .ititle{
     display: inline-block;
-    font-weight: 400;
   }
+}
+
+/* -----------------------------------------------------------------------------
+
+# Ticket Styles
+
+----------------------------------------------------------------------------- */
+#searchwrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+#searchwrapper>div>i{
+  position: absolute;
+  margin: 10px;
+}
+#searchwrapper>div>i:hover{
+  cursor: pointer;
+}
+#ticketsearch{
+  padding-left: 30px;
+  border-radius: 20px;
+}
+input[type="radio"]{
+  display: none;
+}
+.ticketwrapper{
+  width: 100%; 
+  display: flex;
+  margin-top: 10px; 
+  justify-content: center; 
+  transform: scale(0); 
+  transform-origin: top; 
+  position: absolute; 
+  transition: all 500ms ease-in-out;
+  text-align: center;
+}
+.ticketwrapper>td{
+  width: 100%;
+  border: none;
+}
+.tbold, .headtbold>th{
+  font-weight: 800;
+}
+.table-body-row>td>label:hover{
+  cursor: pointer;
 }

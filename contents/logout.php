@@ -3,7 +3,7 @@
 
     if(isset($_SESSION['username'])){
         $username = $_SESSION['username'];
-        if($_SESSION['createtable'] == 1){
+        if(isset($_SESSION['createtable']) && $_SESSION['createtable'] == 1){
             $conn->query("DROP TABLE `$username`");
         }
     }

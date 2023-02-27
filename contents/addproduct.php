@@ -143,8 +143,8 @@
 	<!-- logo -->
 
     <div class="container">
+	<input type="checkbox" id="flip">
       <div class="forms">
-	  	<input type="checkbox" id="flip">
         <div class="form-content" id="addproductform">
             <div class="login-form">
               <div class="title">Add New Product</div>
@@ -197,8 +197,8 @@
                 </div>
             </div>
             </div>
-          </div>
-		  <div class="form-content" id="updateproductform">
+        </div>
+		<div class="form-content" id="updateproductform">
             <div class="login-form">
               <div class="title">Update Product</div>
 
